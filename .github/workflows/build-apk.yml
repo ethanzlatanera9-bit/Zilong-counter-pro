@@ -19,35 +19,27 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses || true
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install -y \
-            git zip unzip openjdk-17-jdk \
-            autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev \
-            libncursesw5-dev cmake libffi-dev
-          python -m pip install --upgrade pip
-          pip install buildozer cython==0.29.34
-
-      - name: Prepare project
-        run: |
-          cp Zilong_Counter_Pro_BY_Ethan_V3_Kivy.py main.py
-          buildozer init
-
-          sed -i 's/^title = .*/title = Zilong Counter Pro/' buildozer.spec
-          sed -i 's/^package.name = .*/package.name = zilongcounter/' buildozer.spec
-          sed -i 's/^package.domain = .*/package.domain = org.ethan/' buildozer.spec
-          sed -i 's/^requirements = .*/requirements = python3,kivy/' buildozer.spec
-          sed -i 's/^orientation = .*/orientation = portrait/' buildozer.spec
-          sed -i 's/^source.include_exts = .*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
+          pip install --upgrade pip
+          pip install buildozer cython
 
       - name: Build APK
         run: |
-          buildozer -v android debug
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Zilong-Counter-Pro-APK
+          name: zilong-counter-apk
           path: bin/*.apk
