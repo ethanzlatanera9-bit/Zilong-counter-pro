@@ -19,8 +19,19 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Check Java
+        run: |
+          java -version
+          echo "JAVA_HOME=$JAVA_HOME"
+
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Accept Android licenses
         run: yes | sdkmanager --licenses || true
