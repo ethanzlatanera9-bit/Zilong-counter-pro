@@ -18,11 +18,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: "17"
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
